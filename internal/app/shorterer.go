@@ -1,22 +1,33 @@
 package app
 
+import "fmt"
+
 var urls = make(map[string]string)
 
-func ShortUrl(url string) string {
+func ShortURL(url string) string {
 	randString := RandStringBytes(5)
-	storeUrl(url, randString)
-	baseUrl := "http://localhost:8080/"
-	return baseUrl + randString
+	storeURL(url, randString)
+	baseURL := "http://localhost:8080/"
+	return baseURL + randString
 }
 
-func GetUrlById(shortUrl string) string {
-	return getUrl(shortUrl)
+func GetUrlByID(shortURL string) string {
+	return getURL(shortURL)
 }
 
-func storeUrl(urlBase string, urlShort string) {
+func storeURL(urlBase string, urlShort string) {
+	fmt.Printf("url %s stored with id %s", urlBase, urlShort)
 	urls[urlShort] = urlBase
+	fmt.Println(urls)
 }
 
-func getUrl(urlShort string) string {
+func getURL(urlShort string) string {
 	return urls[urlShort]
+}
+
+func GetAll() {
+	for s, s2 := range urls {
+		fmt.Println(s)
+		fmt.Println(s2)
+	}
 }

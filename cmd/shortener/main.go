@@ -9,24 +9,25 @@ import (
 
 func urlHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		shortUrl := r.URL.String()[1:]
-		longUrl := app.GetUrlById(shortUrl)
+		shortURL := r.URL.String()[1:]
+		longURL := app.GetUrlByID(shortURL)
 
-		if longUrl == "" {
+		if longURL == "" {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
+		w.Header().Set("Location", longURL)
 		w.WriteHeader(http.StatusTemporaryRedirect)
-		w.Header().Set("Location", longUrl)
+		return
 
 	} else {
 		reqBodyBytes, _ := io.ReadAll(r.Body)
-		shortUrl := app.ShortUrl(string(reqBodyBytes))
+		shortURL := app.ShortURL(string(reqBodyBytes))
 
 		w.WriteHeader(http.StatusCreated)
 		w.Header().Set("Content-Type", "text/plain")
-		_, err := w.Write([]byte(shortUrl))
+		_, err := w.Write([]byte(shortURL))
 		if err != nil {
 			log.Fatal("error while writing response")
 		}
