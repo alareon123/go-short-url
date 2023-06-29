@@ -4,11 +4,10 @@ import "fmt"
 
 var urls = make(map[string]string)
 
-func ShortURL(url string) string {
-	randString := RandStringBytes(5)
+func ShortURL(url string, host string) string {
+	randString := RandStringBytes(8)
 	storeURL(url, randString)
-	baseURL := "http://localhost:8080/"
-	return baseURL + randString
+	return host + randString
 }
 
 func GetUrlByID(shortURL string) string {

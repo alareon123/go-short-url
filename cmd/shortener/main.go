@@ -23,7 +23,7 @@ func urlHandler(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		reqBodyBytes, _ := io.ReadAll(r.Body)
-		shortURL := app.ShortURL(string(reqBodyBytes))
+		shortURL := app.ShortURL(string(reqBodyBytes), r.Host)
 
 		w.WriteHeader(http.StatusCreated)
 		w.Header().Set("Content-Type", "text/plain")
