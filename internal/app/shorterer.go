@@ -7,7 +7,8 @@ var urls = make(map[string]string)
 func ShortURL(url string, host string) string {
 	randString := RandStringBytes(8)
 	storeURL(url, randString)
-	return host + "/" + randString
+	baseURL := "http://localhost:8080/"
+	return baseURL + randString
 }
 
 func GetURLByID(shortURL string) string {
