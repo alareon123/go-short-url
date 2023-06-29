@@ -10,7 +10,7 @@ import (
 func urlHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		shortURL := r.URL.String()[1:]
-		longURL := app.GetUrlByID(shortURL)
+		longURL := app.GetURLByID(shortURL)
 
 		if longURL == "" {
 			w.WriteHeader(http.StatusBadRequest)
