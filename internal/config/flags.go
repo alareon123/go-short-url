@@ -13,11 +13,11 @@ func Init() {
 	flag.StringVar(&BaseAddressURL, "b", "http://localhost:8080", "base address for short urls")
 	flag.Parse()
 
-	if envAppUrl := os.Getenv("SERVER_ADDRESS"); envAppUrl != "" {
-		AppServerURL = envAppUrl
+	if envAppURL := os.Getenv("SERVER_ADDRESS"); envAppURL != "" {
+		AppServerURL = envAppURL
 	}
-	if envBaseAddressUrl := os.Getenv("BASE_URL"); envBaseAddressUrl != "" {
-		BaseAddressURL = envBaseAddressUrl
+	if envBaseAddressURL := os.Getenv("BASE_URL"); envBaseAddressURL != "" {
+		BaseAddressURL = envBaseAddressURL
 	}
 	BaseAddressURL += "/"
 }
