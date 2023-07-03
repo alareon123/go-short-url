@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/alareon123/go-short-url.git/internal/app"
+	"github.com/alareon123/go-short-url.git/internal/config"
 	"github.com/go-chi/chi/v5"
 	"io"
 	"log"
@@ -15,7 +16,7 @@ func urlShortHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	shortURL := app.ShortURL(string(reqBodyBytes), r.Host)
+	shortURL := app.ShortURL(string(reqBodyBytes))
 
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "text/plain")
@@ -39,10 +40,12 @@ func getURLHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	config.Init()
+
 	r := chi.NewRouter()
 
 	r.Post("/", urlShortHandler)
 	r.Get("/{id}", getURLHandler)
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(config.AppServerURL, r)
 }

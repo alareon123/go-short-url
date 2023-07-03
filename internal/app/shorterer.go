@@ -1,14 +1,16 @@
 package app
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/alareon123/go-short-url.git/internal/config"
+)
 
 var urls = make(map[string]string)
 
-func ShortURL(url string, host string) string {
+func ShortURL(url string) string {
 	randString := RandStringBytes(8)
 	storeURL(url, randString)
-	baseURL := "http://localhost:8080/"
-	return baseURL + randString
+	return config.BaseAddressURL + randString
 }
 
 func GetURLByID(shortURL string) string {
