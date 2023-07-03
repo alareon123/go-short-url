@@ -25,7 +25,7 @@ func urlShortHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getUrlHandler(w http.ResponseWriter, r *http.Request) {
+func getURLHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	longURL := app.GetURLByID(id)
 
@@ -42,7 +42,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Post("/", urlShortHandler)
-	r.Get("/{id}", getUrlHandler)
+	r.Get("/{id}", getURLHandler)
 
 	http.ListenAndServe(":8080", r)
 }

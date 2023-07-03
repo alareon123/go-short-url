@@ -57,6 +57,7 @@ func Test_urlShortHandler(t *testing.T) {
 
 			result := w.Result()
 			resultBodyBytes, _ := io.ReadAll(result.Body)
+			defer result.Body.Close()
 
 			assert.Equal(t, tt.want.statusCode, result.StatusCode)
 			assert.Equal(t, tt.want.emptyBody, len(resultBodyBytes) == 0)
