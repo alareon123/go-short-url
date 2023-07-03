@@ -2,42 +2,47 @@ package main
 
 import (
 	"github.com/alareon123/go-short-url.git/internal/app"
+	"github.com/go-chi/chi/v5"
 	"io"
 	"log"
 	"net/http"
 )
 
-func urlHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		shortURL := r.URL.String()[1:]
-		longURL := app.GetURLByID(shortURL)
+func urlShortHandler(w http.ResponseWriter, r *http.Request) {
+	reqBodyBytes, _ := io.ReadAll(r.Body)
 
-		if longURL == "" {
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		w.Header().Set("Location", longURL)
-		w.WriteHeader(http.StatusTemporaryRedirect)
+	if len(reqBodyBytes) == 0 {
+		w.WriteHeader(http.StatusBadRequest)
 		return
+	}
+	shortURL := app.ShortURL(string(reqBodyBytes), r.Host)
 
-	} else {
-		reqBodyBytes, _ := io.ReadAll(r.Body)
-		shortURL := app.ShortURL(string(reqBodyBytes), r.Host)
-
-		w.WriteHeader(http.StatusCreated)
-		w.Header().Set("Content-Type", "text/plain")
-		_, err := w.Write([]byte(shortURL))
-		if err != nil {
-			log.Fatal("error while writing response")
-		}
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "text/plain")
+	_, err := w.Write([]byte(shortURL))
+	if err != nil {
+		log.Fatal("error while writing response")
 	}
 }
 
+func getURLHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	longURL := app.GetURLByID(id)
+
+	if longURL == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Location", longURL)
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
 func main() {
-	mux := http.NewServeMux()
+	r := chi.NewRouter()
 
-	mux.HandleFunc("/", urlHandler)
+	r.Post("/", urlShortHandler)
+	r.Get("/{id}", getURLHandler)
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8080", r)
 }
